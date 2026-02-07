@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cute Page</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ffe6f2, #f3e8ff);
+    font-family: 'Poppins', sans-serif;
+}
+
+.container {
+    text-align: center;
+    background: rgba(255,255,255,0.6);
+    padding: 50px 70px;
+    border-radius: 25px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 15px 40px rgba(255,105,180,0.25);
+    position: relative;
+    width: 400px;
+    height: 260px;
+}
+
+h1 {
+    color: #ff69b4;
+    margin-bottom: 30px;
+}
+
+button {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    position: absolute;
+    transition: left 0.3s ease, top 0.3s ease; /* smooth movement */
+}
+
+/* YES LEFT FIXED */
+.yes {
+    background-color: #6edb8f;
+    color: white;
+    left: 40px;
+    bottom: 20px;
+    z-index: 2;
+}
+
+/* NO RIGHT FIXED AT START */
+.no {
+    background-color: #ff6b81;
+    color: white;
+    width: 80px;
+    height: 40px;
+    font-size: 16px;
+    bottom: 20px;
+    right: 40px; /* start on right side */
+    z-index: 1;
+}
+
+/* Love Message */
+.love-message {
+    font-size: 26px;
+    font-weight: 600;
+    color: #ff4da6;
+    animation: fadePop 0.8s ease forwards;
+}
+
+@keyframes fadePop {
+    from { opacity: 0; transform: scale(0.8) translateY(20px);}
+    to { opacity: 1; transform: scale(1) translateY(0);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Will you be my Valentine? 💕</h1>
+    <button class="yes">Yes</button>
+    <button class="no">No</button>
+</div>
+
+<script>
+const noBtn = document.querySelector('.no');
+const yesBtn = document.querySelector('.yes');
+const container = document.querySelector('.container');
+
+function moveNoButton() {
+    const containerRect = container.getBoundingClientRect();
+    const yesRect = yesBtn.getBoundingClientRect();
+
+    const maxX = containerRect.width - noBtn.offsetWidth;
+    const maxY = containerRect.height * 0.65 - noBtn.offsetHeight;
+
+    let randomX = Math.random() * maxX;
+    let randomY = Math.random() * maxY;
+
+    // Prevent No from overlapping Yes
+    if (
+        randomX + noBtn.offsetWidth > yesRect.left &&
+        randomX < yesRect.right &&
+        randomY + noBtn.offsetHeight > yesRect.top &&
+        randomY < yesRect.bottom
+    ) {
+        randomY = yesRect.top - noBtn.offsetHeight - 10;
+        if (randomY < 0) randomY = 0;
+    }
+
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
+    noBtn.style.right = "auto"; // remove initial right positioning when moving
+}
+
+// Move No when user hovers or clicks
+noBtn.addEventListener("mouseenter", moveNoButton);
+noBtn.addEventListener("click", moveNoButton);
+
+// Yes click shows love message
+yesBtn.addEventListener("click", () => {
+    yesBtn.style.transform = "scale(1.2)";
+    setTimeout(() => {
+        container.innerHTML = `
+        <div class="love-message">
+            Wooooow!!! I LOVE YOU SALMA !! 💖✨
+        </div>
+        `;
+    }, 200);
+});
+</script>
+
+</body>
+</html>
